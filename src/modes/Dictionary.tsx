@@ -1,22 +1,20 @@
 import React, {useState} from "react";
-import {useDictionary} from "../hooks/useDictionary";
 import {
-  Box,
-  Button,
   Container,
   IconButton,
   List,
   ListItem,
-  ListItemText, Modal,
+  ListItemText,
   SpeedDial,
   SpeedDialAction,
-  SpeedDialIcon, TextField
+  SpeedDialIcon
 } from "@mui/material";
 import {Delete, Edit} from "@mui/icons-material"
 import {Word} from "../states/dictionary";
 import {CreationModal} from "../components/dictionary/CreationModal";
 import {useRecoilValue} from "recoil";
 import {Dictionary as DictionaryState} from "../states/dictionary"
+import {EditModal} from "../components/dictionary/EditModal";
 
 type Props = {
   words: Word[]
@@ -26,6 +24,15 @@ const Dictionary: React.VFC<Props> = ({words}) => {
   const [focusedWord, setFocusedWord] = useState<Word>()
   const [isOpened, setOpened] = useState(false)
 
+  const openEditor = (word: Word) => () => {
+    setFocusedWord(word)
+    setOpened(true)
+  }
+  const closeEditor = () => {
+    setFocusedWord(undefined)
+    setOpened(false)
+  }
+
   return (
     <>
       <List>
@@ -33,11 +40,7 @@ const Dictionary: React.VFC<Props> = ({words}) => {
           words.map(w => (
             <ListItem key={w.word}>
               <ListItemText primary={w.word} secondary={w.ja}/>
-              <IconButton aria-label="edit" size="large" onClick={() => {
-                console.log(1)
-                setFocusedWord(w)
-                setOpened(true)
-              }}>
+              <IconButton aria-label="edit" size="large" onClick={openEditor(w)}>
                 <Edit fontSize="inherit"/>
               </IconButton>
               <IconButton aria-label="delete" size="large">
@@ -47,7 +50,7 @@ const Dictionary: React.VFC<Props> = ({words}) => {
           ))
         }
       </List>
-      <CreationModal isOpened={isOpened} closeModal={() => setOpened(false)} word={focusedWord}/>
+      <EditModal isOpened={isOpened} closeModal={closeEditor} word={focusedWord!}/>
     </>
   )
 }
