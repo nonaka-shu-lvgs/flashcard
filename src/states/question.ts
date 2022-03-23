@@ -1,5 +1,8 @@
 import {atom, selector} from "recoil";
 import {Word} from "./dictionary";
+import {openDB} from "idb";
+import _ from "lodash"
+import {RenderDispatcher} from "./render-dispatcher";
 
 type Answer = string
 type QuestionMode = "en" | "ja"
@@ -9,10 +12,37 @@ export const QuestionMode = atom<QuestionMode>({
   default: "ja"
 })
 
-export const QuestionWords = atom<Word[]>({
+export const QuestionWords = selector<Word[]>({
   key: "QuestionWords",
-  default: []
+  get: async ({get}) => {
+    get(RenderDispatcher)
+    const db = await openDB("flashcard")
+    const totalWordsCount = await db.count("words")
+
+    const offset = _.random(0, totalWordsCount - 11)
+
+    let cursor = await db.transaction("words").store.openCursor()
+
+    let i = 0
+    let words: Word[] = []
+    while (cursor) {
+      if (words.length >= 10) {
+        break
+      }
+
+      if (i++ < offset) {
+        continue
+      }
+
+      words.push(cursor!.value as Word)
+      cursor = await cursor.continue()
+    }
+
+    console.log(1)
+    return words
+  }
 })
+
 
 export const QuestionAnswers = atom<Map<Word, Answer>>({
   key: "QuestionAnswers",

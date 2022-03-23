@@ -15,7 +15,7 @@ export const App: React.VFC = () => {
         <ButtonGroup variant="contained">
           <Button onClick={toDictionary} variant={mode == "Dictionary" ? "outlined" : "contained"}>単語帳</Button>
           <Button onClick={toQuestion} variant={mode == "Question" ? "outlined" : "contained"}>出題</Button>
-          <Button onClick={toStats} variant={mode == "Stats" ? "outlined" : "contained"}>統計</Button>
+          {/*<Button onClick={toStats} variant={mode == "Stats" ? "outlined" : "contained"}>統計</Button>*/}
         </ButtonGroup>
         <Container>
           {mode == "Dictionary" ? <Suspense fallback={<Loading/>}><DictionaryContainer/></Suspense> : (<></>)}

@@ -2,7 +2,6 @@ import React, {useCallback, useRef, useState} from "react";
 import {Alert, AlertTitle, Box, Button, Container, Stack, TextField, Typography} from "@mui/material";
 import {useQuestion} from "../../hooks/useQuestion";
 import {TimerIndicator} from "../lib/TimerIndicator";
-import {useDictionary} from "../../hooks/useDictionary";
 
 type Process = "question" | "correct" | "incorrect"
 
@@ -12,8 +11,7 @@ type Props = {
 
 export const QuestionDialogue: React.VFC<Props> = ({onProceedResult}) => {
   const _onProceedResult = useCallback(onProceedResult, [onProceedResult])
-  const {words} = useDictionary(1)
-  const {word, answer, proceed, hasNext} = useQuestion(words)
+  const {word, answer, proceed, hasNext} = useQuestion()
   const [process, setProcess] = useState<Process>("question")
 
   const ref = useRef<HTMLInputElement>()

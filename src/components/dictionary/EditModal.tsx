@@ -16,24 +16,28 @@ const style = {
 
 type Props = {
   isOpened: boolean
+  onSubmit: (prev: Word, word: Word) => Promise<void>
   closeModal: () => void
   word?: Word
 }
 
-export const EditModal: React.VFC<Props> = ({isOpened, closeModal, word}) => {
-  const {appendWord} = useDictionary(1)
+export const EditModal: React.VFC<Props> = ({isOpened, onSubmit, closeModal, word}) => {
   const engRef = useRef<HTMLInputElement>()
   const jaRef = useRef<HTMLInputElement>()
+
+  if (!word) {
+    return <></>
+  }
 
   return (
     <Modal open={isOpened} onClose={closeModal}>
       <Box sx={style}>
         <Stack spacing={2}>
-          <TextField label="英単語" inputRef={engRef} defaultValue={word?.word}/>
+          <TextField label="英単語" inputRef={engRef} defaultValue={word?.en}/>
           <TextField label="日本語" inputRef={jaRef} defaultValue={word?.ja}/>
           <Button variant="contained" onClick={() => {
-            appendWord({
-              word: engRef.current!.value,
+            onSubmit(word, {
+              en: engRef.current!.value,
               ja: jaRef.current!.value
             }).then(() => closeModal())
           }}>編集</Button>

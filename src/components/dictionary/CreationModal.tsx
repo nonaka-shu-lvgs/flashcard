@@ -1,6 +1,5 @@
 import React, {useRef} from "react";
 import {Box, Button, Modal, Stack, TextField} from "@mui/material";
-import {useDictionary} from "../../hooks/useDictionary";
 import {Word} from "../../states/dictionary";
 
 const style = {
@@ -16,11 +15,11 @@ const style = {
 
 type Props = {
   isOpened: boolean
+  onSubmit: (word: Word) => Promise<void>
   closeModal: () => void
 }
 
-export const CreationModal: React.VFC<Props> = ({isOpened, closeModal}) => {
-  const {appendWord} = useDictionary(1)
+export const CreationModal: React.VFC<Props> = ({isOpened, onSubmit, closeModal}) => {
   const engRef = useRef<HTMLInputElement>()
   const jaRef = useRef<HTMLInputElement>()
 
@@ -31,10 +30,10 @@ export const CreationModal: React.VFC<Props> = ({isOpened, closeModal}) => {
           <TextField label="英単語" inputRef={engRef}/>
           <TextField label="日本語" inputRef={jaRef}/>
           <Button variant="contained" onClick={() => {
-            appendWord({
-              word: engRef.current!.value,
-              ja: jaRef.current!.value
-            }).then(() => closeModal())
+            onSubmit({
+              en: engRef.current!.value.trim(),
+              ja: jaRef.current!.value.trim()
+            }).then(closeModal)
           }}>追加</Button>
         </Stack>
       </Box>

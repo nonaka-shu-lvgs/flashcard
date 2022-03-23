@@ -12,15 +12,16 @@ import {
 import {Delete, Edit} from "@mui/icons-material"
 import {Word} from "../states/dictionary";
 import {CreationModal} from "../components/dictionary/CreationModal";
-import {useRecoilValue} from "recoil";
-import {Dictionary as DictionaryState} from "../states/dictionary"
 import {EditModal} from "../components/dictionary/EditModal";
+import {useDictionary} from "../hooks/useDictionary";
 
 type Props = {
   words: Word[]
+  onEdit: (prev: Word, word: Word) => Promise<void>
+  onDelete: (word: Word) => Promise<void>
 }
 
-const Dictionary: React.VFC<Props> = ({words}) => {
+const Dictionary: React.VFC<Props> = ({words, onEdit, onDelete}) => {
   const [focusedWord, setFocusedWord] = useState<Word>()
   const [isOpened, setOpened] = useState(false)
 
@@ -43,25 +44,25 @@ const Dictionary: React.VFC<Props> = ({words}) => {
               <IconButton aria-label="edit" size="large" onClick={openEditor(w)}>
                 <Edit fontSize="inherit"/>
               </IconButton>
-              <IconButton aria-label="delete" size="large">
+              <IconButton aria-label="delete" size="large" onClick={() => onDelete(w)}>
                 <Delete fontSize="inherit"/>
               </IconButton>
             </ListItem>
           ))
         }
       </List>
-      <EditModal isOpened={isOpened} closeModal={closeEditor} word={focusedWord!}/>
+      <EditModal isOpened={isOpened} onSubmit={onEdit} closeModal={closeEditor} word={focusedWord!}/>
     </>
   )
 }
 
 export const DictionaryContainer: React.VFC = () => {
   const [isOpened, setOpened] = useState(false)
-  const words = useRecoilValue(DictionaryState)
+  const { words, addWord, editWord, deleteWord } = useDictionary()
 
   return (
     <Container>
-      <Dictionary words={words}/>
+      <Dictionary words={words} onEdit={editWord} onDelete={deleteWord}/>
       <SpeedDial
         ariaLabel="ショートカット"
         sx={{position: "absolute", bottom: 24, right: 24}}
@@ -76,7 +77,7 @@ export const DictionaryContainer: React.VFC = () => {
           }}
         />
       </SpeedDial>
-      <CreationModal isOpened={isOpened} closeModal={() => setOpened(false)}/>
+      <CreationModal isOpened={isOpened} onSubmit={addWord} closeModal={() => setOpened(false)}/>
     </Container>
 
   )

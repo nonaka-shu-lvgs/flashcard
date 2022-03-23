@@ -1,12 +1,13 @@
 import {useRecoilState, useRecoilValue} from "recoil";
 import {QuestionAnswers, QuestionMode, QuestionWords} from "../states/question";
-import {Word} from "../states/dictionary";
+import {useState} from "react";
 
-export function useQuestion(words: Word[]) {
+export function useQuestion() {
+  const words = useRecoilValue(QuestionWords)
   const questionMode = useRecoilValue(QuestionMode)
-  const [questionWords, setQuestionWords] = useRecoilState(QuestionWords)
+  const [restQuestionWords, setRestQuestionWords] = useState(words)
   const [answeredWords, setAnsweredWords] = useRecoilState(QuestionAnswers)
-  const [word, ...rests] = questionWords.length == 0 ? words : questionWords
+  const [word, ...rests] = restQuestionWords
 
 
   const answer = (str: string) => {
@@ -15,7 +16,7 @@ export function useQuestion(words: Word[]) {
   }
 
   const proceed = () => {
-    setQuestionWords(rests)
+    setRestQuestionWords(rests)
   }
 
   return {

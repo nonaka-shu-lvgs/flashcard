@@ -1,5 +1,6 @@
 import {atom, selector} from "recoil";
 import {openDB} from "idb";
+import {RenderDispatcher} from "./render-dispatcher";
 
 type Pagination = {
   currentPage: number,
@@ -22,6 +23,7 @@ const Pagination = atom<Pagination>({
 export const Dictionary = selector<Word[]>({
   key: "Dictionary",
   get: async ({get}) => {
+    get(RenderDispatcher)
     const db = await openDB("flashcard", 1,{
       upgrade(db) {
         db.createObjectStore("words")
@@ -31,5 +33,5 @@ export const Dictionary = selector<Word[]>({
     const pagination = get(Pagination)
 
     return db.getAll("words", null, pagination.currentPage * 20)
-  }
+  },
 })
