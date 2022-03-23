@@ -1,18 +1,17 @@
-import {useDictionary} from "./useDictionary";
-import {useState} from "react";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {QuestionAnswers, QuestionMode, QuestionWords} from "../states/question";
 import {Word} from "../states/dictionary";
 
-export function useQuestion() {
-  const {words} = useDictionary(1)
-  const [questionWords, setQuestionWords] = useState(words)
-  const [answeredWords, setAnsweredWords] = useState<Map<Word, string>>(new Map())
-  const [word, ...rests] = questionWords
+export function useQuestion(words: Word[]) {
+  const questionMode = useRecoilValue(QuestionMode)
+  const [questionWords, setQuestionWords] = useRecoilState(QuestionWords)
+  const [answeredWords, setAnsweredWords] = useRecoilState(QuestionAnswers)
+  const [word, ...rests] = questionWords.length == 0 ? words : questionWords
 
 
-  const collectAnswer = (str: string) => {
+  const answer = (str: string) => {
     setAnsweredWords(new Map(answeredWords).set(word, str))
-
-    return str === word.word
+    return str === word[questionMode]
   }
 
   const proceed = () => {
@@ -21,8 +20,8 @@ export function useQuestion() {
 
   return {
     word,
-    collectAnswer,
+    answer,
     proceed,
-    hasNext: rests.length !== 0
+    hasNext: rests.length !== 0,
   }
 }

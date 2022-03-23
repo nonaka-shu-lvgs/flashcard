@@ -1,10 +1,8 @@
-import {Word, Words} from "../states/dictionary";
-import {useState} from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {Dictionary, Word} from "../states/dictionary";
+import {useRecoilValue} from "recoil";
 
 export function useDictionary(page: number) {
-  // const [_, setWords] = useRecoilState(Words)
-  const words = useRecoilValue(Words)
+  const words = useRecoilValue(Dictionary)
 
   const appendWord = (word: Word) => {
     return Promise.resolve()

@@ -9,4 +9,5 @@ build({
     minify: false,
     sourcemap: true,
     watch: true
+
 }).catch(console.error)

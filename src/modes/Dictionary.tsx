@@ -38,8 +38,8 @@ const Dictionary: React.VFC<Props> = ({words}) => {
       <List>
         {
           words.map(w => (
-            <ListItem key={w.word}>
-              <ListItemText primary={w.word} secondary={w.ja}/>
+            <ListItem key={w.en}>
+              <ListItemText primary={w.en} secondary={w.ja}/>
               <IconButton aria-label="edit" size="large" onClick={openEditor(w)}>
                 <Edit fontSize="inherit"/>
               </IconButton>

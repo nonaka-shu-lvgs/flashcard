@@ -19,7 +19,7 @@ export const App: React.VFC = () => {
         </ButtonGroup>
         <Container>
           {mode == "Dictionary" ? <Suspense fallback={<Loading/>}><DictionaryContainer/></Suspense> : (<></>)}
-          {mode == "Question" ? <QuestionContainer/> : (<></>)}
+          {mode == "Question" ? <Suspense fallback={<Loading/>}><QuestionContainer/></Suspense> : (<></>)}
         </Container>
       </Container>
     </RecoilRoot>
