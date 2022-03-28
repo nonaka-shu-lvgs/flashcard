@@ -46,7 +46,7 @@ export const QuestionDialogue: React.VFC<Props> = ({onProceedResult}) => {
               ? <SubmitButton/>
               : process == "correct"
               ? <CorrectDialogue onProceed={next} onProceedResult={_onProceedResult} hasNext={hasNext}/>
-              : <InCorrectDialogue onProceed={next} onProceedResult={_onProceedResult} hasNext={hasNext} answer={word[mode === "en" ? "ja" : "en"]}/>
+              : <InCorrectDialogue onProceed={next} onProceedResult={_onProceedResult} hasNext={hasNext} answer={word[mode]}/>
           }
         </Stack>
       </Container>
