@@ -1,15 +1,16 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {LinearProgress} from "@mui/material";
+import {LinearProgress, LinearProgressProps} from "@mui/material";
 
 type Props = {
   time: number,
   resolution?: number,
-  onExceeded?: () => void
+  onExceeded?: () => void,
+  color?: LinearProgressProps["color"]
 }
 
 const percentage = (base: number) => (current: number) => Math.floor(current / base * 100)
 
-export const TimerIndicator: React.VFC<Props> = ({time, onExceeded, resolution = 100}) => {
+export const TimerIndicator: React.VFC<Props> = ({time, onExceeded, resolution = 100, color = "inherit"}) => {
   const percentageCal = useCallback(percentage(time), [time])
   const [progress, setProgress] = useState(100)
 
@@ -31,5 +32,5 @@ export const TimerIndicator: React.VFC<Props> = ({time, onExceeded, resolution =
     return clear
   }, [progress, resolution])
 
-  return <LinearProgress variant="determinate" value={progress} color="success"/>
+  return <LinearProgress variant="determinate" value={progress} color={color}/>
 }

@@ -5,11 +5,11 @@ import _ from "lodash"
 import {RenderDispatcher} from "./render-dispatcher";
 
 type Answer = string
-type QuestionMode = "en" | "ja"
+export type QuestionMode = "en" | "ja"
 
 export const QuestionMode = atom<QuestionMode>({
   key: "QuestionMode",
-  default: "ja"
+  default: "en"
 })
 
 export const QuestionWords = selector<Word[]>({
@@ -38,8 +38,7 @@ export const QuestionWords = selector<Word[]>({
       cursor = await cursor.continue()
     }
 
-    console.log(1)
-    return words
+    return _.shuffle(words)
   }
 })
 
