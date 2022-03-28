@@ -51437,7 +51437,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       onProceed: next2,
       onProceedResult: _onProceedResult,
       hasNext,
-      answer: word[mode === "en" ? "ja" : "en"]
+      answer: word[mode]
     }))));
   };
   var CorrectDialogue = ({ onProceed, hasNext, onProceedResult }) => {
