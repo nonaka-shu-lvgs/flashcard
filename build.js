@@ -8,6 +8,6 @@ build({
     bundle: true,
     minify: false,
     sourcemap: true,
-    watch: true
+    watch: process.env.WATCH ? process.env.WATCH === "true" : false
 
 }).catch(console.error)
